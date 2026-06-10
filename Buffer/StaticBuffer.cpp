@@ -7,7 +7,7 @@ struct BufferMetaInfo StaticBuffer::metainfo[BUFFER_CAPACITY];
 StaticBuffer::StaticBuffer() {
 
   // initialise all blocks as free
-  for (int bufferIndex = 0;bufferIndex<BUFFER_CAPACITY-1;bufferIndex++) {
+  for (int bufferIndex = 0;bufferIndex<BUFFER_CAPACITY;bufferIndex++) {
     metainfo[bufferIndex].free = true;
   }
 }

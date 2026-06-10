@@ -32,10 +32,12 @@ int main(int argc, char *argv[]) {
     for(int j=0;j<relCatEntry.numAttrs;j++)
     {
       AttrCatEntry attcatbuf;
-      int ret2=AttrCacheTable::getAttrCatEntry(0,j,&attcatbuf);
-      printf("  %s: %s\n", attcatbuf.attrName, attcatbuf.attrType);
+      int ret2=AttrCacheTable::getAttrCatEntry(i,j,&attcatbuf);
+      const char * attrType=attcatbuf.attrType==NUMBER? "NUM":"STR";
+      printf("  %s: %s\n", attcatbuf.attrName, attrType);
     }
   }
+  
 
   return 0;
 }
