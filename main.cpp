@@ -23,21 +23,5 @@ int main(int argc, char *argv[]) {
 
           printf("  %s: %s\n", attrName, attrType);
   */ 
-  for(int i=0;i<2;i++)
-  {
-    RelCatEntry relCatEntry;
-    int ret=RelCacheTable::getRelCatEntry(i,&relCatEntry);
-    printf("Relation: %s\n", relCatEntry.relName);
-
-    for(int j=0;j<relCatEntry.numAttrs;j++)
-    {
-      AttrCatEntry attcatbuf;
-      int ret2=AttrCacheTable::getAttrCatEntry(i,j,&attcatbuf);
-      const char * attrType=attcatbuf.attrType==NUMBER? "NUM":"STR";
-      printf("  %s: %s\n", attcatbuf.attrName, attrType);
-    }
-  }
-  
-
-  return 0;
+  return FrontendInterface::handleFrontend(argc,argv);
 }

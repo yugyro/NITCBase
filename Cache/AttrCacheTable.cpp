@@ -46,3 +46,32 @@ void AttrCacheTable::recordToAttrCatEntry(union Attribute record[ATTRCAT_NO_ATTR
   // copy the rest of the fields in the record to the attrCacheEntry struct
 
 }
+
+/* returns the attribute with name `attrName` for the relation corresponding to relId
+NOTE: this function expects the caller to allocate memory for `*attrCatBuf`
+*/
+int AttrCacheTable::getAttrCatEntry(int relId, char attrName[ATTR_SIZE], AttrCatEntry* attrCatBuf) {
+
+  // check that relId is valid and corresponds to an open relation
+  if(relId<=0 || relId>=MAX_OPEN)
+  return E_OUTOFBOUND;
+  if(attrCache[relId]==nullptr)
+  return E_RELNOTOPEN;
+  
+   
+  // iterate over the entries in the attribute cache and set attrCatBuf to the entry that
+  //    matches attrName
+  AttrCacheEntry * entry=attrCache[relId];
+  while(entry)
+  {
+    if(strcmp(entry->attrCatEntry.attrName,attrName)==0)
+    {
+    *attrCatBuf=entry->attrCatEntry;
+    return SUCCESS;
+    }
+    entry=entry->next;
+  }
+  // no attribute with name attrName for the relation
+  return E_ATTRNOTEXIST;
+}
+
