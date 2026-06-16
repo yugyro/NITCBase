@@ -107,7 +107,9 @@ int RecBuffer::getSlotMap(unsigned char *slotMap) {
   unsigned char *slotMapInBuffer = bufferPtr + HEADER_SIZE;
 
   // copy the values from `slotMapInBuffer` to `slotMap` (size is `slotCount`)
-  memcpy(slotMap,slotMapInBuffer,slotCount);
+  for(int i=0;i<slotCount;i++){
+    slotMap[i]=*(slotMapInBuffer+i);
+  }
 
   return SUCCESS;
 }
@@ -123,8 +125,8 @@ int compareAttrs(union Attribute attr1, union Attribute attr2, int attrType) {
       diff = attr1.nVal - attr2.nVal;
     // else
     if(diff>0)return 1;
-    else
-    return 0? diff==0:-1;
+    else if(diff<0)return -1;
+    else return 0;
 
     /*
     if diff > 0 then return 1

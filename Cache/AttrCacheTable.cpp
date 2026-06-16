@@ -53,7 +53,7 @@ NOTE: this function expects the caller to allocate memory for `*attrCatBuf`
 int AttrCacheTable::getAttrCatEntry(int relId, char attrName[ATTR_SIZE], AttrCatEntry* attrCatBuf) {
 
   // check that relId is valid and corresponds to an open relation
-  if(relId<=0 || relId>=MAX_OPEN)
+  if(relId<0 || relId>=MAX_OPEN)
   return E_OUTOFBOUND;
   if(attrCache[relId]==nullptr)
   return E_RELNOTOPEN;
