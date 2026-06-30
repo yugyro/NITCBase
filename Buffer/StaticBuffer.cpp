@@ -4,9 +4,17 @@
 unsigned char StaticBuffer::blocks[BUFFER_CAPACITY][BLOCK_SIZE];
 struct BufferMetaInfo StaticBuffer::metainfo[BUFFER_CAPACITY];
 
-StaticBuffer::StaticBuffer() {
+// declare the blockAllocMap array
+unsigned char StaticBuffer::blockAllocMap[DISK_BLOCKS];
 
-  for (int bufferIndex = 0;bufferIndex<=BUFFER_CAPACITY-1;bufferIndex++) {
+StaticBuffer::StaticBuffer() {
+  // copy blockAllocMap blocks from disk to buffer (using readblock() of disk)
+  // blocks 0 to 3
+  for(int i=0;i<4;i++)
+  {
+    Disk::readBlock(this->blockAllocMap + (i*BLOCK_SIZE),i);
+  }
+    for (int bufferIndex = 0;bufferIndex<=BUFFER_CAPACITY-1;bufferIndex++) {
     // set metainfo[bufferindex] with the following values
     //   free = true
     //   dirty = false
@@ -25,6 +33,10 @@ StaticBuffer::~StaticBuffer() {
     write back blocks with metainfo as free=false,dirty=true
     using Disk::writeBlock()
     */
+  for(int i=0;i<4;i++)
+  {
+    Disk::writeBlock(this->blockAllocMap+(i*BLOCK_SIZE),i);
+  }
   for(int i=0;i<BUFFER_CAPACITY;i++)
   {
     if(!metainfo[i].free && metainfo[i].dirty)

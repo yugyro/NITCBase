@@ -85,3 +85,31 @@ int RelCacheTable::resetSearchIndex(int relId) {
   
 }
 
+int RelCacheTable::setRelCatEntry(int relId, RelCatEntry *relCatBuf) {
+
+  if(relId<0 || relId>MAX_OPEN-1/*relId is outside the range [0, MAX_OPEN-1]*/) {
+    return E_OUTOFBOUND;
+  }
+
+  if(RelCacheTable::relCache[relId]==nullptr/*entry corresponding to the relId in the Relation Cache Table is free*/) {
+    return E_RELNOTOPEN;
+  }
+
+  // copy the relCatBuf to the corresponding Relation Catalog entry in
+  // the Relation Cache Table.
+  relCache[relId]->relCatEntry=*relCatBuf;
+  // set the dirty flag of the corresponding Relation Cache entry in
+  // the Relation Cache Table.
+  relCache[relId]->dirty=true;
+  return SUCCESS;
+}
+
+void RelCacheTable::relCatEntryToRecord(RelCatEntry * relcatbuf,Attribute * rec)
+{
+  rec[RELCAT_FIRST_BLOCK_INDEX].nVal=relcatbuf->firstBlk;
+  rec[RELCAT_LAST_BLOCK_INDEX].nVal=relcatbuf->lastBlk;
+  rec[RELCAT_NO_ATTRIBUTES_INDEX].nVal=relcatbuf->numAttrs;
+  rec[RELCAT_NO_RECORDS_INDEX].nVal=relcatbuf->numRecs;
+  rec[RELCAT_NO_SLOTS_PER_BLOCK_INDEX].nVal=relcatbuf->numSlotsPerBlk;
+  strcpy(rec[RELCAT_REL_NAME_INDEX].sVal,relcatbuf->relName);
+}
